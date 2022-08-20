@@ -28,6 +28,7 @@ public class StartMenuUI : MonoBehaviour
     public void StartGame()
     {
         Persistence.Instance.PlayerName = nameInput.text;
+        Persistence.Instance.LoadHighScore();
         SceneManager.LoadScene(1);
     }
 

@@ -11,7 +11,7 @@ public class MainManager : MonoBehaviour
     public int LineCount = 6;
     public Rigidbody Ball;
 
-    public TextMeshProUGUI ScoreText;
+    public TextMeshProUGUI ScoreText, HighScoreText;
     public GameObject GameOverText;
     
     private bool m_Started = false;
@@ -25,8 +25,12 @@ public class MainManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        playerName = Persistence.Instance == null ? "" : $"{Persistence.Instance.PlayerName}'s ";
-        ScoreText.text = $"{playerName}Score : 0";
+        if (Persistence.Instance != null)
+        {
+            playerName = Persistence.Instance.PlayerName + "'s ";
+            ScoreText.text = $"{playerName}Score : 0";
+            HighScoreText.text = $"Best Score: {Persistence.Instance.HighScorePlayer}: {Persistence.Instance.HighScore}";
+        }        
 
         const float step = 0.6f;
         int perLine = Mathf.FloorToInt(4.0f / step);
@@ -81,6 +85,10 @@ public class MainManager : MonoBehaviour
     public void GameOver()
     {
         m_GameOver = true;
+        if (Persistence.Instance != null)
+        {
+            Persistence.Instance.SaveHighScore(m_Points);
+        }
         GameOverText.SetActive(true);
     }
 }
